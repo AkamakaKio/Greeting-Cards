@@ -1,0 +1,33 @@
+from PIL import Image, ImageDraw, ImageFont
+
+def create_greeting_card(artwork_path, output_path, message="Happy Birthday!"):
+    # Open the artwork image
+    artwork = Image.open(artwork_path)
+
+    # Create a new blank image for the greeting card
+    card_width = 600
+    card_height = 400
+    card = Image.new("RGB", (card_width, card_height), "white")
+
+    # Paste the artwork onto the card
+    artwork.thumbnail((card_width, card_height))
+    card.paste(artwork, ((card_width - artwork.width) // 2, (card_height - artwork.height) // 2))
+
+    # Add a message to the card
+    draw = ImageDraw.Draw(card)
+    font = ImageFont.load_default()  # You can customize the font and size
+
+    text_width, text_height = draw.textsize(message, font)
+    text_position = ((card_width - text_width) // 2, card_height - text_height - 20)
+
+    draw.text(text_position, message, fill="black", font=font)
+
+    # Save the final greeting card
+    card.save(output_path)
+
+# Example usage:
+artwork_path = "path/to/kids_artwork.jpg"  # Replace with the actual path to the artwork image
+output_path = "path/to/greeting_card.jpg"  # Replace with the desired output path
+
+create_greeting_card(artwork_path, output_path)
+
